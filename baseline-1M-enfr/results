@@ -1,61 +1,33 @@
 
-# Results on the generic test set after 13 epochs
-# Generic test set is a held out set of sentences, in-domain by design.
-#
-BLEU = 30.92, 58.2/37.5/26.0/18.4 (BP=0.967, ratio=0.968, hyp_len=42243, ref_len=43658)
+MT evaluation scorer began on 2017 Jan 12 at 15:05:37
+command line:  tools/mteval-v13a.pl -r data/testsets-enfr/News/newstest2014-fren-ref.fr.sgm -s data/testsets-enfr/News/newstest2014-fren-src.en.sgm -t exp/newstest2014-fren-tgt.trans.fr.sgm -c
+  Evaluation of any-to-fr translation using:
+    src set "newstest2014" (176 docs, 3003 segs)
+    ref set "newstest2014" (1 refs)
+    tst set "newstest2014" (1 systems)
+
+length ratio: 0.946537138126407 (73173/77306), penalty (log): -0.0564825823732797
+NIST score = 7.2576  BLEU score = 0.2614 for system "tst"
+
+# ------------------------------------------------------------------------
+
+Individual N-gram scoring
+        1-gram   2-gram   3-gram   4-gram   5-gram   6-gram   7-gram   8-gram   9-gram
+        ------   ------   ------   ------   ------   ------   ------   ------   ------
+ NIST:  5.3558   1.5459   0.3097   0.0399   0.0062   0.0009   0.0004   0.0001   0.0001  "tst"
+
+ BLEU:  0.5852   0.3372   0.2146   0.1382   0.0913   0.0614   0.0416   0.0282   0.0191  "tst"
+
+# ------------------------------------------------------------------------
+Cumulative N-gram scoring
+        1-gram   2-gram   3-gram   4-gram   5-gram   6-gram   7-gram   8-gram   9-gram
+        ------   ------   ------   ------   ------   ------   ------   ------   ------
+ NIST:  5.3558   6.9018   7.2115   7.2514   7.2576   7.2585   7.2589   7.2590   7.2591  "tst"
+
+ BLEU:  0.5530   0.4198   0.3294   0.2614   0.2094   0.1691   0.1372   0.1118   0.0913  "tst"
+MT evaluation scorer ended on 2017 Jan 12 at 15:05:46
 
 
-# Below is the training log for each iteration.
-# Nist and Bleu score has been calculated on the newstest2014 (3003 sentences)
 
-Epoch 1 ; Iteration 14400/14432 ; Learning rate 1.0000 ; Source tokens/s 4448 ; Perplexity 19.80
-Validation perplexity: 6.5514926626349
-NIST score = 4.8245  BLEU score = 0.1504 for system "tst"
-
-Epoch 2 ; Iteration 14400/14432 ; Learning rate 1.0000 ; Source tokens/s 4301 ; Perplexity 6.29	
-Validation perplexity: 5.0771459939084
-NIST score = 5.1292  BLEU score = 0.1685 for system "tst"
-
-Epoch 3 ; Iteration 14400/14432 ; Learning rate 1.0000 ; Source tokens/s 4294 ; Perplexity 5.18	
-Validation perplexity: 4.5159126277723	
-NIST score = 5.7608  BLEU score = 0.1959 for system "tst"
-
-Epoch 4 ; Iteration 14400/14432 ; Learning rate 1.0000 ; Source tokens/s 4306 ; Perplexity 4.68	
-Validation perplexity: 4.2240542675239
-NIST score = 5.8818  BLEU score = 0.2043 for system "tst"
-
-Epoch 5 ; Iteration 14400/14432 ; Learning rate 1.0000 ; Source tokens/s 4307 ; Perplexity 4.38	
-Validation perplexity: 4.0590572135022
-NIST score = 5.9846  BLEU score = 0.2093 for system "tst"
-
-Epoch 6 ; Iteration 14400/14432 ; Learning rate 0.6500 ; Source tokens/s 4313 ; Perplexity 3.88	
-Validation perplexity: 3.776619800496
-NIST score = 6.2047  BLEU score = 0.2214 for system "tst"
-
-Epoch 7 ; Iteration 14400/14432 ; Learning rate 0.4225 ; Source tokens/s 4489 ; Perplexity 3.56	
-Validation perplexity: 3.6035115999147	
-NIST score = 6.3689  BLEU score = 0.2291 for system "tst"
-
-Epoch 8 ; Iteration 14400/14432 ; Learning rate 0.2746 ; Source tokens/s 4489 ; Perplexity 3.36	
-Validation perplexity: 3.495377077439
-NIST score = 6.4688  BLEU score = 0.2357 for system "tst"
-
-Epoch 9 ; Iteration 14400/14432 ; Learning rate 0.1785 ; Source tokens/s 4488 ; Perplexity 3.24	
-Validation perplexity: 3.4344568143859
-NIST score = 6.4734  BLEU score = 0.2358 for system "tst"
-
-Epoch 10 ; Iteration 14400/14432 ; Learning rate 0.1160 ; Source tokens/s 4488 ; Perplexity 3.16
-Validation perplexity: 3.4107026163124	
-NIST score = 6.4945  BLEU score = 0.2379 for system "tst"
-
-Epoch 11 ; Iteration 14400/14432 ; Learning rate 0.0754 ; Source tokens/s 4489 ; Perplexity 3.10
-Validation perplexity: 3.3932063332613
-NIST score = 6.4996  BLEU score = 0.2389 for system "tst"
-
-Epoch 12 ; Iteration 14400/14432 ; Learning rate 0.0490 ; Source tokens/s 4453 ; Perplexity 3.07	
-Validation perplexity: 3.3842572867544
-NIST score = 6.5267  BLEU score = 0.2389 for system "tst"
-
-Epoch 13 ; Iteration 14400/14432 ; Learning rate 0.0319 ; Source tokens/s 4114 ; Perplexity 3.04	
-Validation perplexity: 3.3773251222489	
-NIST score = 6.5312  BLEU score = 0.2405 for system "tst"
+For information, Multi Bleu score on generic test set:
+BLEU = 31.01, 58.4/37.6/26.1/18.5 (BP=0.967, ratio=0.967, hyp_len=42238, ref_len=43658)
