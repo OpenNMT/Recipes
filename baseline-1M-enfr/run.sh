@@ -26,7 +26,7 @@ OPENNMT_PATH=../../OpenNMT
 stage=0
 
 # if you want to run without training and use an existing model in the "exp" folder set notrain to true
-notrain=true
+notrain=false
 
 # making these variables to make replication easier for other languages
 sl=en
@@ -114,7 +114,7 @@ fi
 # you can change this by changing the model name from _final to _cpu and remove -gpuid 1
 if [ $stage -le 5 ]; then
   [ $decode_cpu = true ] && dec_opt="" || dec_opt="-gpuid 1"
-  th translate.lua -model exp/model-$sl$tl"_final.t7" \
+  th translate.lua -replace_unk -model exp/model-$sl$tl"_final.t7" \
   -src data/baseline-1M-$sl$tl/generic_test.$sl.tok -output exp/generic_test.hyp.$tl.tok $dec_opt
 fi
 
@@ -141,7 +141,7 @@ testset=newstest2014-fren
 
   [ $decode_cpu = true ] && dec_opt="" || dec_opt="-gpuid 1"
 
-  th translate.lua -model exp/model-$sl$tl"_final"*.t7 \
+  th translate.lua -replace_unk -model exp/model-$sl$tl"_final"*.t7 \
   -src data/testsets-$sl$tl/News/$testset-src.$sl.tok \
   -output exp/$testset-tgt.trans.$tl.tok $dec_opt
 
