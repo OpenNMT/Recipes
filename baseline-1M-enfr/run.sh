@@ -120,7 +120,7 @@ fi
 
 # Evaluate the generic test set with multi-bleu
 if [ $stage -le 6 ]; then
-  th tools/detokenize.lua < exp/generic_test.hyp.$tl.tok > exp/generic_test.hyp.$tl.detok
+  th tools/detokenize.lua -case_feature < exp/generic_test.hyp.$tl.tok > exp/generic_test.hyp.$tl.detok
   local/multi-bleu.perl data/baseline-1M-$sl$tl/generic_test.$tl \
   < exp/generic_test.hyp.$tl.detok > exp/generic_test_multibleu.txt
 fi
