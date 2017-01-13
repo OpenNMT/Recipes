@@ -49,7 +49,7 @@ if [ $stage -le 0 ]; then
     wget https://s3.amazonaws.com/opennmt-trainingdata/$corpus-$sl$tl.tgz
     tar xzfv $corpus-$sl$tl.tgz
   fi
-  if [ ! -f onmt_$sl$tl"_tests".tgz ]; then
+  if [ ! -f testsets-$sl$tl.tgz ]; then
     echo "$0: downloading the baseline corpus from amazon s3"
     wget https://s3.amazonaws.com/opennmt-tests/testsets-$sl$tl.tgz
     tar xzfv testsets-$sl$tl.tgz
