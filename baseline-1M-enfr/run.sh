@@ -121,7 +121,7 @@ fi
 # Evaluate the generic test set with multi-bleu
 if [ $stage -le 6 ]; then
   th tools/detokenize.lua < exp/generic_test.hyp.$tl.tok > exp/generic_test.hyp.$tl.detok
-  tools/multi-bleu.perl data/baseline-1M-$sl$tl/generic_test.$tl \
+  local/multi-bleu.perl data/baseline-1M-$sl$tl/generic_test.$tl \
   < exp/generic_test.hyp.$tl.detok > exp/generic_test_multibleu.txt
 fi
 
@@ -133,7 +133,7 @@ if [ $stage -le 7 ]; then
 
 testset=newstest2014-fren
 
-  tools/input-from-sgm.perl < data/testsets-$sl$tl/News/$testset-src.$sl.sgm \
+  local/input-from-sgm.perl < data/testsets-$sl$tl/News/$testset-src.$sl.sgm \
   > data/testsets-$sl$tl/News/$testset-src.$sl
 
   th tools/tokenize.lua -case_feature -joiner_annotate < data/testsets-$sl$tl/News/$testset-src.$sl \
@@ -150,11 +150,11 @@ testset=newstest2014-fren
   > exp/$testset-tgt.trans.$tl
 
 # Wrap-xml to convert to sgm
-  tools/wrap-xml.perl $tl data/testsets-$sl$tl/News/$testset-src.$sl.sgm tst \
+  local/wrap-xml.perl $tl data/testsets-$sl$tl/News/$testset-src.$sl.sgm tst \
   < exp/$testset-tgt.trans.$tl \
   > exp/$testset-tgt.trans.$tl.sgm
 
-  tools/mteval-v13a.pl -r data/testsets-$sl$tl/News/$testset-ref.$tl.sgm \
+  local/mteval-v13a.pl -r data/testsets-$sl$tl/News/$testset-ref.$tl.sgm \
   -s data/testsets-$sl$tl/News/$testset-src.$sl.sgm -t exp/$testset-tgt.trans.$tl.sgm \
   -c > exp/nist-bleu-$testset
 fi
