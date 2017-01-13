@@ -32,6 +32,9 @@ notrain=false
 sl=en
 tl=fr
 
+# training corpus - baseline-1M/baseline-2M available
+corpus=baseline-1M
+
 # At the moment only "stage" option is available anyway
 . local/parse_options.sh
 
@@ -41,10 +44,10 @@ if [ $stage -le 0 ]; then
 # TODO put this part in a local/download_data.sh script ?
   mkdir -p data
   cd data
-  if [ ! -f baseline-1M-$sl$tl.tgz ]; then
+  if [ ! -f $corpus-$sl$tl.tgz ]; then
     echo "$0: downloading the baseline corpus from amazon s3"
-    wget https://s3.amazonaws.com/opennmt-trainingdata/baseline-1M-$sl$tl.tgz
-    tar xzfv baseline-1M-$sl$tl.tgz
+    wget https://s3.amazonaws.com/opennmt-trainingdata/$corpus-$sl$tl.tgz
+    tar xzfv $corpus-$sl$tl.tgz
   fi
   if [ ! -f onmt_$sl$tl"_tests".tgz ]; then
     echo "$0: downloading the baseline corpus from amazon s3"
@@ -70,7 +73,7 @@ fi
 # Tokenize the Corpus
 if [ $stage -le 1 ]; then
   echo "$0: tokenizing corpus and test sets"
-  for f in data/baseline-1M-$sl$tl/*.?? ; do th tools/tokenize.lua -case_feature -joiner_annotate < $f > $f.tok ; done
+  for f in data/$corpus-$sl$tl/*.?? ; do th tools/tokenize.lua -case_feature -joiner_annotate < $f > $f.tok ; done
 fi
 
 # Preprocess the data - decide here the vocabulary size 50000 default value
@@ -78,10 +81,10 @@ if [ $stage -le 2 ]; then
   mkdir -p exp
   echo "$0: preprocessing corpus"
   th preprocess.lua -src_vocab_size 50000 -tgt_vocab_size 50000 \
-  -train_src data/baseline-1M-$sl$tl/generic-1M_train.$sl.tok \
-  -train_tgt data/baseline-1M-$sl$tl/generic-1M_train.$tl.tok \
-  -valid_src data/baseline-1M-$sl$tl/generic_valid.$sl.tok \
-  -valid_tgt data/baseline-1M-$sl$tl/generic_valid.$tl.tok -save_data exp/model-$sl$tl
+  -train_src data/$corpus-$sl$tl/*_train.$sl.tok \
+  -train_tgt data/$corpus-$sl$tl/*_train.$tl.tok \
+  -valid_src data/$corpus-$sl$tl/*_valid.$sl.tok \
+  -valid_tgt data/$corpus-$sl$tl/*_valid.$tl.tok -save_data exp/data-$corpus-$sl$tl
 fi
 
 # Train the model !!!! even if OS cuda device ID is 0 you need -gpuid=1
@@ -90,13 +93,13 @@ fi
 if [ $stage -le 3 ]; then
   if [ $notrain = false ]; then
     echo "$0: training starting, will take a while."
-    th train.lua -data  exp/model-$sl$tl-train.t7 \
-    -save_model exp/model-$sl$tl \
-    -epochs 13 -learning_rate 1 -start_decay_at 5 -learning_rate_decay 0.65 -gpuid 1
-    cp -f exp/model-$sl$tl"_epoch13_"*".t7" exp/model-$sl$tl"_final.t7"
+    th train.lua -data  exp/data-$corpus-$sl$tl-train.t7 \
+    -save_model exp/model-$corpus-$sl$tl \
+    -epochs 13 -learning_rate 1 -gpuid 1
+    cp -f exp/model-$corpus-$sl$tl"_epoch13_"*".t7" exp/model-$corpus-$sl$tl"_final.t7"
   else
     echo "$0: using an existing model"
-    if [ ! -f exp/model-$sl$tl"_final.t7" ]; then
+    if [ ! -f exp/model-$corpus-$sl$tl"_final.t7" ]; then
       echo "$0: mode file does not exist"
       exit 1
     fi
@@ -106,7 +109,7 @@ fi
 # Deploy model for CPU usage
 if [ $stage -le 4 ]; then
   if [ $decode_cpu = true ]; then
-    th tools/release_model.lua -force -model exp/model-$sl$tl"_final.t7" -output_model exp/model-$sl$tl"_cpu.t7" -gpuid 1
+    th tools/release_model.lua -force -model exp/model-$corpus-$sl$tl"_final.t7" -output_model exp/model-$corpus-$sl$tl"_cpu.t7" -gpuid 1
   fi
 fi
 
@@ -114,15 +117,15 @@ fi
 # you can change this by changing the model name from _final to _cpu and remove -gpuid 1
 if [ $stage -le 5 ]; then
   [ $decode_cpu = true ] && dec_opt="" || dec_opt="-gpuid 1"
-  th translate.lua -replace_unk -model exp/model-$sl$tl"_final.t7" \
-  -src data/baseline-1M-$sl$tl/generic_test.$sl.tok -output exp/generic_test.hyp.$tl.tok $dec_opt
+  th translate.lua -replace_unk -model exp/model-$corpus-$sl$tl"_final.t7" \
+  -src data/$corpus-$sl$tl/*_test.$sl.tok -output exp/${corpus}_test.hyp.$tl.tok $dec_opt
 fi
 
 # Evaluate the generic test set with multi-bleu
 if [ $stage -le 6 ]; then
-  th tools/detokenize.lua -case_feature < exp/generic_test.hyp.$tl.tok > exp/generic_test.hyp.$tl.detok
-  local/multi-bleu.perl data/baseline-1M-$sl$tl/generic_test.$tl \
-  < exp/generic_test.hyp.$tl.detok > exp/generic_test_multibleu.txt
+  th tools/detokenize.lua -case_feature < exp/${corpus}_test.hyp.$tl.tok > exp/${corpus}_test.hyp.$tl.detok
+  local/multi-bleu.perl data/$corpus-$sl$tl/${corpus}_test.$tl \
+  < exp/${corpus}_test.hyp.$tl.detok > exp/${corpus}_test_multibleu.txt
 fi
 
 ###############################
@@ -141,7 +144,7 @@ testset=newstest2014-fren
 
   [ $decode_cpu = true ] && dec_opt="" || dec_opt="-gpuid 1"
 
-  th translate.lua -replace_unk -model exp/model-$sl$tl"_final"*.t7 \
+  th translate.lua -replace_unk -model exp/model-$corpus-$sl$tl"_final"*.t7 \
   -src data/testsets-$sl$tl/News/$testset-src.$sl.tok \
   -output exp/$testset-tgt.trans.$tl.tok $dec_opt
 
