@@ -95,7 +95,7 @@ if [ $stage -le 3 ]; then
     echo "$0: training starting, will take a while."
     th train.lua -data  exp/data-$corpus-$sl$tl-train.t7 \
     -save_model exp/model-$corpus-$sl$tl \
-    -epochs 13 -learning_rate 1 -gpuid 1
+    -epoch_end 13 -learning_rate 1 -gpuid 1
     cp -f exp/model-$corpus-$sl$tl"_epoch13_"*".t7" exp/model-$corpus-$sl$tl"_final.t7"
   else
     echo "$0: using an existing model"
