@@ -93,7 +93,7 @@ if [ $stage -le 3 ]; then
     th train.lua -data  exp/model-$sl$tl-train.t7 \
     -save_model exp/model-$sl$tl \
     -epochs 13 -learning_rate 1 -start_decay_at 5 -learning_rate_decay 0.65 -gpuid 1
-    cp -f exp/model-$sl$tl"_epoch13_*.t7" exp/model-$sl$tl"_final.t7"
+    cp -f exp/model-$sl$tl"_epoch13_"*".t7" exp/model-$sl$tl"_final.t7"
   else
     echo "$0: using an existing model"
     if [ ! -f exp/model-$sl$tl"_final.t7" ]; then
