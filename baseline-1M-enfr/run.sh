@@ -134,7 +134,7 @@ fi
 
 if [ $stage -le 7 ]; then
 
-testset=newstest2014-fren
+testset=newstest2014-$sl$tl
 
   perl local/input-from-sgm.perl < data/testsets-$sl$tl/News/$testset-src.$sl.sgm \
   > data/testsets-$sl$tl/News/$testset-src.$sl
@@ -147,7 +147,6 @@ testset=newstest2014-fren
   th translate.lua -replace_unk -model exp/model-$corpus-$sl$tl"_final"*.t7 \
   -src data/testsets-$sl$tl/News/$testset-src.$sl.tok \
   -output exp/$testset-tgt.trans.$tl.tok $dec_opt
-
 
   th tools/detokenize.lua -case_feature < exp/$testset-tgt.trans.$tl.tok \
   > exp/$testset-tgt.trans.$tl
