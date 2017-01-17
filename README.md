@@ -18,3 +18,7 @@ Parameters: 2x500 layers, 13 epochs. See script for the details.
 Data: set of 1 million parallel sentences (extract of Europarl, Newscommentaries, ..)
 See the results file for the evaluation.
 
+### Romance Multi-way
+See http://forum.opennmt.net/t/training-romance-multi-way-model/86/10  
+GPU highly recommended. Training takes 4 1/2 hours per epoch on a single GTX 1080.
+Parameters: 2x500 layers, 13 epochs. See script for the details.
