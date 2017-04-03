@@ -138,12 +138,11 @@ fi
 if [ $stage -le 6 ]; then
   for src in es fr it pt ro ; do
     for tgt in es fr it pt ro ; do
-      [ ! $src = $tgt ] && th tools/detokenize.lua -case_feature < exp/test-$src$tgt.hyp.$tgt.tok \
-      > exp/test-$src$tgt.hyp.$tgt.detok
-      [ ! $src = $tgt ] && local/multi-bleu.perl data/test-$src$tgt.$tgt \
-      < exp/test-$src$tgt.hyp.$tgt.detok > exp/test-$src$tgt"_multibleu".txt
+      [ ! $src = $tgt ] && local/multi-bleu.perl data/test-$src$tgt.$tgt.tok \
+      < exp/test-$src$tgt.hyp.$tgt.tok > exp/test-$src$tgt"_multibleu".txt
     done
   done
+  grep BLEU exp/*multibleu.txt
 fi
 
 
