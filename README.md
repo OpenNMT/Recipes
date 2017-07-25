@@ -6,7 +6,7 @@ You will find here some "recipes" which basically script the end-to-end data pre
 
 ## Requirements
 
-* You do need OpenNMT - see [here](http://opennmt.net/Guide/#installation). If you clone Recipes.git repo at the same level as OpenNMT.git on your local computer, you don't need to update the PATH
+* You do need OpenNMT - see [here](http://opennmt.net/OpenNMT/installation/). If you clone Recipes.git repo at the same level as OpenNMT.git on your local computer, you don't need to update the PATH
 in the scripts. Otherwise update the line `OPENNMT_PATH=../../OpenNMT`
 * for evaluation scripts, you do need perl `XML::Twig` module (`perl -MCPAN -e 'install XML::Twig`)
 
